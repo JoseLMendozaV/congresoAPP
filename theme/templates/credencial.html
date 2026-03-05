@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 my-12 print:my-0 print:shadow-none print:border-none print:rounded-none">
+    
+    <div class="bg-gradient-to-br from-[#115b83] to-[#1a928d] p-8 text-center print:bg-[#115b83]">
+        <h2 class="text-2xl font-black text-white uppercase tracking-widest">{{ registro.congress.name }}</h2>
+        <p class="text-white/80 text-sm mt-2 font-medium tracking-wide">PASE DE ACCESO OFICIAL</p>
+    </div>
+
+    <div class="p-8 text-center relative">
+        <h3 class="text-3xl font-extrabold text-gray-900 mb-2 uppercase">{{ registro.participant.name }}</h3>
+        
+        <div class="inline-block bg-[#1a928d]/10 text-[#1a928d] border border-[#1a928d]/20 px-4 py-1.5 rounded-full text-sm font-black tracking-wider uppercase mb-6">
+            {{ registro.get_status_display }}
+        </div>
+
+        {% if registro.participant.is_utp %}
+            <p class="text-[#115b83] font-bold mb-6 text-lg">
+                Estudiante UTP <br> <span class="text-gray-500 font-medium text-sm">{{ registro.participant.get_utp_career_display }}</span>
+            </p>
+        {% else %}
+            <p class="text-[#115b83] font-bold mb-6 text-lg">Participante General</p>
+        {% endif %}
+
+        <div class="flex justify-center mb-6">
+            {% if registro.qr_code and registro.qr_code.qr_image %}
+                <div class="p-2 bg-white rounded-2xl border-4 border-[#115b83]/10 shadow-sm inline-block">
+                    <img src="{{ registro.qr_code.qr_image.url }}" alt="Código QR" class="w-48 h-48">
+                </div>
+            {% endif %}
+        </div>
+        
+        <p class="text-xs text-gray-400 font-mono bg-gray-50 py-2 rounded-lg inline-block px-4">ID: {{ registro.participant.document_id }}</p>
+    </div>
+
+    <div class="bg-gray-50 p-6 border-t border-gray-100 text-center print:hidden">
+        <button onclick="window.print()" class="w-full bg-[#115b83] hover:bg-[#0d4563] text-white font-bold py-4 px-6 rounded-xl shadow-lg transition duration-300 hover:-translate-y-1 flex justify-center items-center gap-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Imprimir Credencial
+        </button>
+    </div>
+</div>
+{% endblock %}

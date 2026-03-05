@@ -1,0 +1,1 @@
+web: gunicorn congreso_core.wsgi --log-file -

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+    <div class="max-w-7xl mx-auto px-4 mt-4 relative z-50" role="alert">
+        {% for message in messages %}
+            <div class="p-4 rounded-xl font-medium text-center shadow-sm {% if message.tags == 'success' %}bg-[#1a928d]/10 text-[#1a928d] border border-[#1a928d]/20{% else %}bg-red-50 text-red-600 border border-red-100{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<section class="relative bg-[#115b83] overflow-hidden rounded-b-[2.5rem] lg:rounded-b-[4rem] shadow-2xl" aria-label="Introducción al congreso">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#115b83] via-[#115b83] to-[#1a928d] opacity-95"></div>
+    
+    <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#1a928d] rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+    <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 flex flex-col items-center text-center">
+        
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium mb-8">
+            <span class="w-2 h-2 rounded-full bg-[#1a928d] animate-pulse"></span>
+            Edición 2026
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-sm">
+            {% if congreso %}{{ congreso.name }}{% else %}Congreso Internacional de Tecnología{% endif %}
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-3xl font-light">
+            Conectando mentes brillantes para forjar el futuro de la ingeniería, ciencia e innovación.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center gap-6 p-4 sm:p-2 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 mb-12 w-full max-w-2xl justify-center shadow-xl">
+            <div class="flex items-center gap-3 px-4 py-2 text-white">
+                <svg class="w-6 h-6 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span class="font-medium">{% if congreso %}{{ congreso.start_date }} al {{ congreso.end_date }}{% else %}15 - 18 Octubre, 2026{% endif %}</span>
+            </div>
+            <div class="hidden sm:block w-px h-8 bg-white/20"></div>
+            <div class="flex items-center gap-3 px-4 py-2 text-white">
+                <svg class="w-6 h-6 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="font-medium">{% if congreso %}{{ congreso.location }}{% else %}Campus Central, UTP{% endif %}</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center px-4">
+            <a href="{% url 'registro_publico' %}" class="w-full sm:w-auto bg-[#1a928d] hover:bg-[#157a76] text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-[#1a928d]/30 transition-all duration-300 hover:-translate-y-1">
+                Registrarse Ahora
+            </a>
+            <a href="#call-for-papers" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-[#115b83] font-bold py-4 px-10 rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1">
+                Call for Papers
+            </a>
+        </div>
+    </div>
+</section>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-32">
+
+    <section aria-labelledby="about-title" class="text-center max-w-4xl mx-auto">
+        <h2 id="about-title" class="text-sm font-bold tracking-widest uppercase mb-3 bg-clip-text text-transparent bg-gradient-to-r from-[#115b83] to-[#1a928d]">
+            Sobre el Evento
+        </h2>
+        <h3 class="text-3xl md:text-4xl font-bold text-[#115b83] mb-8">Impulsando la Transformación Digital</h3>
+        <p class="text-lg text-gray-500 leading-relaxed font-light">
+            Un espacio de encuentro de alto nivel para investigadores, profesionales y estudiantes. Compartiremos los últimos avances en tecnologías disruptivas, fomentando la colaboración académica y el networking con líderes de la industria regional e internacional.
+        </p>
+    </section>
+
+    <section aria-labelledby="topics-title">
+        <div class="text-center mb-16">
+            <h2 id="topics-title" class="text-3xl font-bold text-[#115b83]">Ejes Temáticos</h2>
+            <div class="h-1 w-20 bg-[#1a928d] mx-auto mt-4 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <article class="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-2xl border border-gray-100 hover:border-[#1a928d]/30 transition-all duration-500 cursor-pointer relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a928d]/5 rounded-bl-full -z-10 transition-transform group-hover:scale-125"></div>
+                <div class="w-14 h-14 bg-gradient-to-br from-[#115b83] to-[#1a928d] text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#115b83]/20">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#115b83] mb-3 group-hover:text-[#1a928d] transition-colors">Inteligencia Artificial</h3>
+                <p class="text-gray-500 font-light leading-relaxed">Machine learning, redes neuronales profundas y procesamiento de lenguaje natural aplicado a la industria.</p>
+            </article>
+
+            <article class="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-2xl border border-gray-100 hover:border-[#1a928d]/30 transition-all duration-500 cursor-pointer relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a928d]/5 rounded-bl-full -z-10 transition-transform group-hover:scale-125"></div>
+                <div class="w-14 h-14 bg-gradient-to-br from-[#115b83] to-[#1a928d] text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#115b83]/20">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#115b83] mb-3 group-hover:text-[#1a928d] transition-colors">Internet de las Cosas</h3>
+                <p class="text-gray-500 font-light leading-relaxed">Arquitecturas IoT, sensores embebidos, ciudades inteligentes y optimización de redes de bajo consumo.</p>
+            </article>
+
+            <article class="group bg-white p-8 rounded-3xl shadow-sm hover:shadow-2xl border border-gray-100 hover:border-[#1a928d]/30 transition-all duration-500 cursor-pointer relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a928d]/5 rounded-bl-full -z-10 transition-transform group-hover:scale-125"></div>
+                <div class="w-14 h-14 bg-gradient-to-br from-[#115b83] to-[#1a928d] text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#115b83]/20">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#115b83] mb-3 group-hover:text-[#1a928d] transition-colors">Ciberseguridad</h3>
+                <p class="text-gray-500 font-light leading-relaxed">Criptografía avanzada, seguridad en redes distribuidas, análisis de vulnerabilidades y blockchain.</p>
+            </article>
+        </div>
+    </section>
+
+    <section aria-labelledby="dates-title" class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 id="dates-title" class="text-3xl font-bold text-[#115b83]">Calendario Oficial</h2>
+            <div class="h-1 w-20 bg-[#1a928d] mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="relative border-l-4 border-[#1a928d]/20 ml-4 md:ml-0 md:mx-auto w-full md:w-3/4">
+            
+            <div class="mb-10 ml-8 relative group">
+                <span class="absolute -left-[42px] top-1 h-6 w-6 rounded-full bg-white border-4 border-[#1a928d] ring-4 ring-white group-hover:scale-125 transition-transform"></span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-sm font-bold tracking-wider text-[#1a928d] uppercase">15 de Agosto, 2026</span>
+                    <h3 class="text-xl font-bold text-[#115b83] mt-1">Cierre de recepción de artículos</h3>
+                    <p class="text-gray-500 mt-2 font-light">Fecha límite inamovible para la subida de papers en la plataforma oficial.</p>
+                </div>
+            </div>
+
+            <div class="mb-10 ml-8 relative group">
+                <span class="absolute -left-[42px] top-1 h-6 w-6 rounded-full bg-white border-4 border-[#115b83] ring-4 ring-white group-hover:scale-125 transition-transform"></span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+                    <span class="text-sm font-bold tracking-wider text-[#115b83] uppercase">10 de Septiembre, 2026</span>
+                    <h3 class="text-xl font-bold text-[#115b83] mt-1">Notificación de Aceptación</h3>
+                    <p class="text-gray-500 mt-2 font-light">Los autores recibirán el veredicto del comité evaluador vía correo electrónico.</p>
+                </div>
+            </div>
+
+            <div class="ml-8 relative group">
+                <span class="absolute -left-[42px] top-1 h-6 w-6 rounded-full bg-[#1a928d] ring-4 ring-[#1a928d]/30 group-hover:scale-125 transition-transform animate-pulse"></span>
+                <div class="bg-gradient-to-r from-[#115b83] to-[#1a928d] p-6 rounded-2xl shadow-lg text-white">
+                    <span class="text-sm font-bold tracking-wider text-white/80 uppercase">Octubre 2026</span>
+                    <h3 class="text-xl font-bold mt-1">¡Inicia el Congreso!</h3>
+                    <p class="text-white/80 mt-2 font-light">Presentaciones magistrales, talleres y actividades de networking.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section aria-labelledby="speakers-title">
+        <div class="text-center mb-16">
+            <h2 id="speakers-title" class="text-3xl font-bold text-[#115b83]">Conferencistas Magistrales</h2>
+            <div class="h-1 w-20 bg-[#1a928d] mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="text-center group">
+                <div class="relative w-48 h-48 mx-auto mb-6">
+                    <div class="absolute inset-0 rounded-full border-[3px] border-dashed border-[#1a928d] opacity-30 group-hover:rotate-180 transition-transform duration-1000"></div>
+                    <img src="https://ui-avatars.com/api/?name=Jane+Doe&background=115b83&color=fff&size=200" alt="Jane Doe" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <h3 class="text-2xl font-bold text-[#115b83]">Dra. Jane Doe</h3>
+                <p class="text-[#1a928d] font-semibold mb-1">Universidad Tecnológica</p>
+                <p class="text-gray-500 text-sm font-light">Arquitectura de Software</p>
+            </div>
+
+            <div class="text-center group">
+                <div class="relative w-48 h-48 mx-auto mb-6">
+                    <div class="absolute inset-0 rounded-full border-[3px] border-dashed border-[#1a928d] opacity-30 group-hover:rotate-180 transition-transform duration-1000"></div>
+                    <img src="https://ui-avatars.com/api/?name=John+Smith&background=1a928d&color=fff&size=200" alt="John Smith" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                </div>
+                <h3 class="text-2xl font-bold text-[#115b83]">Dr. John Smith</h3>
+                <p class="text-[#1a928d] font-semibold mb-1">Instituto de Ciencias</p>
+                <p class="text-gray-500 text-sm font-light">Inteligencia Artificial</p>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

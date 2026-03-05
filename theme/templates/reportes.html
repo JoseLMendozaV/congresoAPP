@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto my-12 px-4 sm:px-6">
+    
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <div>
+            <h2 class="text-3xl font-extrabold text-[#115b83]">Panel de Métricas</h2>
+            <p class="text-gray-500 mt-1">Resumen en tiempo real del congreso</p>
+        </div>
+        <a href="{% url 'exportar_csv' %}" class="bg-gradient-to-r from-[#115b83] to-[#1a928d] hover:from-[#0d4563] hover:to-[#13706d] text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2 transition-all hover:-translate-y-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Exportar CSV
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Registrados</p>
+            <p class="text-4xl font-black text-[#115b83]">{{ total_registros }}</p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Acreditados (Check-in)</p>
+            <p class="text-4xl font-black text-emerald-500">{{ acreditados }}</p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-shadow">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Pendientes</p>
+            <p class="text-4xl font-black text-amber-500">{{ pre_registrados }}</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-8 py-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-2 h-6 bg-[#1a928d] rounded-full"></div>
+            <h3 class="text-xl font-bold text-[#115b83]">Asistencia por Charla</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 text-gray-500 uppercase text-xs font-bold tracking-wider">
+                        <th class="py-5 px-8">Charla</th>
+                        <th class="py-5 px-8">Sala</th>
+                        <th class="py-5 px-8 text-center">Cupo</th>
+                        <th class="py-5 px-8 text-center">Asistentes</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700 divide-y divide-gray-100">
+                    {% for charla in charlas_stats %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="py-5 px-8 font-bold text-gray-900">{{ charla.title }}</td>
+                        <td class="py-5 px-8 text-gray-500">{{ charla.room }}</td>
+                        <td class="py-5 px-8 text-center">{{ charla.capacity }}</td>
+                        <td class="py-5 px-8 text-center">
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#115b83]/10 text-[#115b83] font-black">
+                                {{ charla.total_asistentes }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-12 text-center text-gray-400 font-medium">Aún no hay charlas registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

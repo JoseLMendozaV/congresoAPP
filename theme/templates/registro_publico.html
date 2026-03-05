@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto my-16 bg-white p-10 rounded-3xl shadow-2xl border border-gray-100 relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-64 h-64 bg-[#1a928d] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"></div>
+    <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-[#115b83] rounded-full mix-blend-multiply filter blur-3xl opacity-10 pointer-events-none"></div>
+
+    <div class="text-center mb-10 relative z-10">
+        <h2 class="text-4xl font-extrabold text-[#115b83]">Pre-registro en Línea</h2>
+        <p class="text-gray-500 mt-3 text-lg">Asegura tu lugar en el <span class="font-bold text-[#1a928d]">{{ congreso.name }}</span></p>
+    </div>
+
+    <form method="POST" action="{% url 'registro_publico' %}" class="space-y-8 relative z-10">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Nombre Completo *</label>
+                <input type="text" name="name" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none transition-colors bg-gray-50 hover:bg-white focus:bg-white">
+            </div>
+            <div>
+                <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Cédula / Pasaporte *</label>
+                <input type="text" name="document_id" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none transition-colors bg-gray-50 hover:bg-white focus:bg-white">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Correo Electrónico *</label>
+                <input type="email" name="email" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none transition-colors bg-gray-50 hover:bg-white focus:bg-white">
+            </div>
+            <div>
+                <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Teléfono *</label>
+                <input type="text" name="phone" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none transition-colors bg-gray-50 hover:bg-white focus:bg-white">
+            </div>
+        </div>
+
+        <div class="border-t-2 border-gray-100 pt-8 mt-4">
+            <label class="flex items-center space-x-4 cursor-pointer mb-6 group">
+                <div class="relative flex items-center justify-center">
+                    <input type="checkbox" name="is_utp" id="is_utp_checkbox" class="peer appearance-none w-6 h-6 border-2 border-gray-300 rounded-md checked:bg-[#1a928d] checked:border-[#1a928d] transition-colors cursor-pointer">
+                    <svg class="absolute w-4 h-4 text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <span class="text-gray-700 font-bold group-hover:text-[#1a928d] transition-colors">Soy estudiante de la Universidad Tecnológica de Panamá (UTP)</span>
+            </label>
+
+            <div id="utp_fields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#115b83]/5 p-8 rounded-2xl border border-[#115b83]/10">
+                <div>
+                    <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Carrera</label>
+                    <select name="utp_career" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none bg-white">
+                        <option value="">-- Selecciona --</option>
+                        <option value="ISC">Ingeniería de Sistemas Computacionales</option>
+                        <option value="IC">Ingeniería Civil</option>
+                        <option value="IE">Ingeniería Electromecánica</option>
+                        <option value="II">Ingeniería Industrial</option>
+                        <option value="OTRA">Otra</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[#115b83] font-bold mb-2 text-sm uppercase tracking-wide">Año de curso</label>
+                    <input type="number" name="utp_year" min="1" max="5" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-0 focus:border-[#1a928d] outline-none bg-white">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-[#115b83] to-[#1a928d] hover:from-[#0d4563] hover:to-[#13706d] text-white font-bold py-4 px-8 rounded-2xl shadow-lg shadow-[#1a928d]/30 transition-all duration-300 transform hover:-translate-y-1 text-lg tracking-wide mt-6">
+            Completar Registro Oficial
+        </button>
+    </form>
+</div>
+
+<script>
+    const checkbox = document.getElementById('is_utp_checkbox');
+    const utpFields = document.getElementById('utp_fields');
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            utpFields.classList.remove('hidden');
+        } else {
+            utpFields.classList.add('hidden');
+        }
+    });
+</script>
+{% endblock %}

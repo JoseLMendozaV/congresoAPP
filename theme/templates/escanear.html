@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto my-12 px-4 sm:px-6">
+    <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl border border-gray-100">
+        
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-gradient-to-br from-[#115b83] to-[#1a928d] rounded-2xl text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            </div>
+            <h2 class="text-3xl font-extrabold text-[#115b83]">Control de Sala</h2>
+            <p class="text-gray-500 mt-2">Registra asistencias escaneando el QR</p>
+        </div>
+
+        <div class="mb-8 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            <label for="session_select" class="block text-[#115b83] font-bold mb-3 text-sm uppercase tracking-wide">1. Selecciona la charla actual:</label>
+            <select id="session_select" class="w-full border-2 border-gray-200 rounded-xl px-4 py-4 focus:ring-0 focus:border-[#1a928d] outline-none text-lg bg-white shadow-sm font-medium text-gray-700 cursor-pointer">
+                <option value="">-- Toca para elegir --</option>
+                {% for charla in charlas %}
+                    <option value="{{ charla.id }}">{{ charla.title }} (Sala: {{ charla.room }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="alert_box" class="hidden w-full text-center p-4 mb-8 rounded-xl font-bold text-lg transition duration-300 border shadow-sm"></div>
+
+        <div>
+            <label class="block text-[#115b83] font-bold mb-3 text-sm uppercase tracking-wide">2. Cámara Activa:</label>
+            <div id="reader" class="w-full overflow-hidden rounded-2xl border-4 border-dashed border-[#1a928d]/30 bg-gray-50"></div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<script>
+    const alertBox = document.getElementById('alert_box');
+    const sessionSelect = document.getElementById('session_select');
+    const csrfToken = document.getElementById('csrf_token').value;
+    let isProcessing = false;
+
+    function showAlert(message, type) {
+        alertBox.className = "w-full text-center p-4 mb-8 rounded-xl font-bold text-lg transition duration-300 block border shadow-sm";
+        if(type === 'success') {
+            alertBox.classList.add('bg-[#1a928d]/10', 'text-[#1a928d]', 'border-[#1a928d]/20');
+            alertBox.innerHTML = `✅ ${message}`;
+        } else if (type === 'warning') {
+            alertBox.classList.add('bg-amber-50', 'text-amber-600', 'border-amber-200');
+            alertBox.innerHTML = `⚠️ ${message}`;
+        } else {
+            alertBox.classList.add('bg-red-50', 'text-red-600', 'border-red-200');
+            alertBox.innerHTML = `❌ ${message}`;
+        }
+        setTimeout(() => { alertBox.className = "hidden"; }, 4000);
+    }
+
+    function onScanSuccess(decodedText) {
+        const sessionId = sessionSelect.value;
+        if (!sessionId) {
+            showAlert("Primero selecciona una charla arriba.", "error");
+            return;
+        }
+        if (isProcessing) return;
+        isProcessing = true;
+
+        fetch("{% url 'registrar_asistencia' %}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+            body: JSON.stringify({ token: decodedText, session_id: sessionId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            showAlert(data.message, data.status);
+            setTimeout(() => { isProcessing = false; }, 2000);
+        })
+        .catch(error => {
+            showAlert("Error de conexión.", "error");
+            setTimeout(() => { isProcessing = false; }, 2000);
+        });
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+    html5QrcodeScanner.render(onScanSuccess);
+</script>
+{% endblock %}

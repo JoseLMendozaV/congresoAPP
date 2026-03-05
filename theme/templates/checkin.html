@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto my-12 px-4 sm:px-6">
+    <div class="flex items-center gap-4 mb-8">
+        <div class="p-3 bg-[#115b83] rounded-xl text-white shadow-lg shadow-[#115b83]/20">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        </div>
+        <h2 class="text-3xl font-extrabold text-[#115b83]">Módulo de Check-in</h2>
+    </div>
+
+    <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
+        <form method="GET" action="{% url 'checkin_buscador' %}" class="flex flex-col sm:flex-row gap-4">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input type="text" name="q" value="{{ query }}" placeholder="Buscar por Nombre, Cédula o Correo..." 
+                       class="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-0 focus:border-[#1a928d] outline-none transition-colors text-lg bg-gray-50 focus:bg-white">
+            </div>
+            <button type="submit" class="bg-gradient-to-r from-[#115b83] to-[#1a928d] hover:from-[#0d4563] hover:to-[#13706d] text-white font-bold py-4 px-10 rounded-2xl shadow-lg transition-all hover:-translate-y-1">
+                Buscar
+            </button>
+        </form>
+    </div>
+
+    {% if query %}
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            {% if resultados %}
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-[#115b83] uppercase text-xs font-bold tracking-wider">
+                                <th class="py-5 px-6">Participante</th>
+                                <th class="py-5 px-6">Documento</th>
+                                <th class="py-5 px-6">Estado</th>
+                                <th class="py-5 px-6 text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 divide-y divide-gray-100">
+                            {% for reg in resultados %}
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="py-5 px-6 font-bold text-gray-900">
+                                    {{ reg.participant.name }}
+                                    {% if reg.participant.is_utp %}
+                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#1a928d]/10 text-[#1a928d] border border-[#1a928d]/20">UTP</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-5 px-6">{{ reg.participant.document_id }}</td>
+                                <td class="py-5 px-6">
+                                    {% if reg.status == 'ACCREDITED' %}
+                                        <span class="inline-flex items-center gap-1.5 text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-lg">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Acreditado
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1.5 text-amber-600 font-bold bg-amber-50 px-3 py-1 rounded-lg">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Pre-registrado
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-5 px-6 text-center">
+                                    {% if reg.status == 'ACCREDITED' %}
+                                        <a href="{% url 'credencial' reg.id %}" class="inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-xl transition-colors text-sm">
+                                            Reimprimir
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'hacer_checkin' reg.id %}" class="inline-flex items-center justify-center bg-[#1a928d] hover:bg-[#13706d] text-white font-bold py-2 px-6 rounded-xl shadow-md transition-all hover:-translate-y-0.5 text-sm">
+                                            Generar Check-in
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-12 text-center">
+                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Sin resultados</h3>
+                    <p class="text-gray-500">No encontramos a nadie llamado "{{ query }}".</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
