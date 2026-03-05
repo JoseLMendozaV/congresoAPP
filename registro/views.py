@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from .models import Registration
+from .models import Congress, Participant, Registration, Session, QRCode, Attendance, Speaker
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
-def inicio(request):
-    return render(request, 'base.html')
+
 
 @staff_member_required(login_url='/admin/login/')
 def credencial(request, registro_id):
@@ -167,7 +166,16 @@ from .models import Congress, Participant, Registration, Session, QRCode, Attend
 def inicio(request):
     # Obtenemos el primer congreso de la base de datos para mostrarlo al público
     congreso = Congress.objects.first()
-    return render(request, 'inicio.html', {'congreso': congreso})
+    
+    # Obtenemos los conferencistas vinculados a ese congreso específico
+    # (Si por alguna razón no hay congreso creado aún, enviamos una lista vacía)
+    speakers = Speaker.objects.filter(congress=congreso) if congreso else []
+    
+    # Enviamos ambas variables a la plantilla HTML
+    return render(request, 'inicio.html', {
+        'congreso': congreso,
+        'speakers': speakers
+    })
 
 # 2. Formulario de Registro Público
 def registro_publico(request):

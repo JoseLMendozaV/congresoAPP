@@ -100,3 +100,15 @@ class AuditLog(models.Model):
     action = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     details = models.TextField(blank=True)
+
+
+class Speaker(models.Model):
+    congress = models.ForeignKey(Congress, on_delete=models.CASCADE, related_name='speakers', verbose_name="Congreso")
+    name = models.CharField(max_length=150, verbose_name="Nombre del Conferencista")
+    specialty = models.CharField(max_length=200, verbose_name="Especialidad")
+    topic = models.CharField(max_length=200, verbose_name="Tema a exponer")
+    country = models.CharField(max_length=100, verbose_name="País")
+    photo = models.ImageField(upload_to='speakers/', blank=True, null=True, verbose_name="Foto de perfil")
+
+    def __str__(self):
+        return self.name

@@ -148,25 +148,28 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {% for speaker in speakers %}
             <div class="text-center group">
                 <div class="relative w-48 h-48 mx-auto mb-6">
                     <div class="absolute inset-0 rounded-full border-[3px] border-dashed border-[#1a928d] opacity-30 group-hover:rotate-180 transition-transform duration-1000"></div>
-                    <img src="https://ui-avatars.com/api/?name=Jane+Doe&background=115b83&color=fff&size=200" alt="Jane Doe" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                    
+                    {% if speaker.photo %}
+                        <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ speaker.name|urlencode }}&background=115b83&color=fff&size=200" alt="{{ speaker.name }}" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                    {% endif %}
                 </div>
-                <h3 class="text-2xl font-bold text-[#115b83]">Dra. Jane Doe</h3>
-                <p class="text-[#1a928d] font-semibold mb-1">Universidad Tecnológica</p>
-                <p class="text-gray-500 text-sm font-light">Arquitectura de Software</p>
+                <h3 class="text-2xl font-bold text-[#115b83]">{{ speaker.name }}</h3>
+                
+                <p class="text-[#1a928d] font-semibold mb-1">{{ speaker.specialty }} | {{ speaker.country }}</p>
+                
+                <p class="text-gray-500 text-sm font-light">{{ speaker.topic }}</p>
             </div>
-
-            <div class="text-center group">
-                <div class="relative w-48 h-48 mx-auto mb-6">
-                    <div class="absolute inset-0 rounded-full border-[3px] border-dashed border-[#1a928d] opacity-30 group-hover:rotate-180 transition-transform duration-1000"></div>
-                    <img src="https://ui-avatars.com/api/?name=John+Smith&background=1a928d&color=fff&size=200" alt="John Smith" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
-                </div>
-                <h3 class="text-2xl font-bold text-[#115b83]">Dr. John Smith</h3>
-                <p class="text-[#1a928d] font-semibold mb-1">Instituto de Ciencias</p>
-                <p class="text-gray-500 text-sm font-light">Inteligencia Artificial</p>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500">
+                <p>Pronto anunciaremos a nuestros conferencistas magistrales.</p>
             </div>
+            {% endfor %}
         </div>
     </section>
 </main>
