@@ -1,1 +1,1 @@
-web: gunicorn congreso_core.wsgi --log-file -
+web: gunicorn congreso_core.wsgi --bind 0.0.0.0:$PORT --log-file -
