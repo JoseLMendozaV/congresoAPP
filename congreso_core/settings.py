@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'https://citdes.utp.ac.pa',
     'https://web-production-5f528.up.railway.app',
+    'https://1gjvjayv.up.railway.app',
     # Aquí también agregarás la URL que te dé Railway más adelante
 ]
 
