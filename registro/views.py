@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from .models import Congress, Participant, Registration, Session, QRCode, Attendance, Speaker, ForumSpeaker
+from .models import Congress, Participant, Registration, Session, QRCode, Attendance, Speaker, Forum
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -164,19 +164,17 @@ from .models import Congress, Participant, Registration, Session, QRCode, Attend
 
 # 1. Nueva Landing Page
 def inicio(request):
-    # Obtenemos el primer congreso de la base de datos para mostrarlo al público
     congreso = Congress.objects.first()
-    forum_speakers = ForumSpeaker.objects.all()
-    # Obtenemos los conferencistas vinculados a ese congreso específico
-    # (Si por alguna razón no hay congreso creado aún, enviamos una lista vacía)
     speakers = Speaker.objects.filter(congress=congreso) if congreso else []
-
-    context = {
+    
+    # Agrega esta línea para consultar los foros
+    forums = Forum.objects.filter(congress=congreso) if congreso else []
+    
+    return render(request, 'inicio.html', {
+        'congreso': congreso,
         'speakers': speakers,
-        'forum_speakers': forum_speakers, # Y lo pasamos al HTML
-        # ... otros contextos que ya tengas ...
-    }
-    return render(request, 'inicio.html', context)
+        'forums': forums, # Pásalo al HTML
+    })
     
 
 # 2. Formulario de Registro Público

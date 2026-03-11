@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Congress, Participant, Registration, QRCode, 
-    Session, Attendance, BadgePrintLog, AuditLog, Speaker, ForumSpeaker
+    Session, Attendance, BadgePrintLog, AuditLog, Speaker, Forum
 )
 
 @admin.register(Congress)
@@ -63,8 +63,13 @@ class SpeakerAdmin(admin.ModelAdmin):
     
     list_filter = ('congress', 'country')
 
-@admin.register(ForumSpeaker)
-class ForumSpeakerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'specialty', 'country', 'topic', 'congress')
-    search_fields = ('name', 'specialty', 'country', 'topic')
-    list_filter = ('congress', 'country')
+@admin.register(Forum)
+class ForumAdmin(admin.ModelAdmin):
+    # Agregamos 'category' a las columnas visibles
+    list_display = ('title', 'category', 'date_time', 'location', 'moderator', 'congress')
+    
+    # Agregamos 'category' para que puedas filtrar en la barra lateral
+    list_filter = ('congress', 'category', 'location')
+    
+    # Agregamos 'category' a la barra de búsqueda
+    search_fields = ('title', 'category', 'moderator', 'speakers_info')

@@ -133,28 +133,22 @@ class Speaker(models.Model):
         return self.name
     
 
-class ForumSpeaker(models.Model):
-    PAISES_CHOICES = [
-        ('pa', 'Panamá'),
-        ('co', 'Colombia'),
-        ('cr', 'Costa Rica'),
-        ('mx', 'México'),
-        ('es', 'España'),
-        ('ar', 'Argentina'),
-        ('cl', 'Chile'),
-        ('pe', 'Perú'),
-        ('us', 'Estados Unidos'),
-        ('br', 'Brasil'),
-        ('de', 'Alemania'),
-        ('uy', 'Uruguay'),
-    ]
+class Forum(models.Model):
+    congress = models.ForeignKey(Congress, on_delete=models.CASCADE, related_name='forums', verbose_name="Congreso")
+    
+    # NUEVO CAMPO AÑADIDO:
 
-    congress = models.ForeignKey(Congress, on_delete=models.CASCADE, related_name='forum_speakers', verbose_name="Congreso")
-    name = models.CharField(max_length=150, verbose_name="Nombre del Panelista")
-    specialty = models.CharField(max_length=200, verbose_name="Especialidad")
-    topic = models.CharField(max_length=200, verbose_name="Tema del Foro")
-    country = models.CharField(max_length=2, choices=PAISES_CHOICES, default='pa', verbose_name="País")
-    photo = models.ImageField(upload_to='forum_speakers/', blank=True, null=True, verbose_name="Foto de perfil")
+    category = models.CharField(max_length=150, default='General', verbose_name="Segmento / Tema del Foro", help_text="Ej: Foro sobre Semiconductores, Foro de Logística, etc.")
+
+    title = models.CharField(max_length=200, verbose_name="Título del Foro")
+    image = models.ImageField(upload_to='forums/', verbose_name="Poster / Imagen promocional")
+    moderator = models.CharField(max_length=150, verbose_name="Moderador")
+    date_time = models.DateTimeField(verbose_name="Fecha y Hora")
+    location = models.CharField(max_length=200, verbose_name="Lugar/Sala")
+    speakers_info = models.TextField(
+        verbose_name="Información de Expositores", 
+        help_text="Escribe aquí los nombres, cargos y detalles de los expositores. Puedes usar saltos de línea."
+    )
 
     def __str__(self):
-        return self.name
+        return f"{self.category} - {self.title}"
