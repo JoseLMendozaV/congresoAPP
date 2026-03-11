@@ -210,7 +210,7 @@
     </section>
 
 
-<section aria-labelledby="forums-title" class="mt-20">
+<section aria-labelledby="forums-title" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 mb-32">
         <div class="text-center mb-16">
             <h2 id="forums-title" class="text-3xl font-bold text-[#115b83]">Foros Destacados</h2>
             <div class="h-1 w-20 bg-[#1a928d] mx-auto mt-4 rounded-full"></div>
@@ -219,59 +219,90 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for foro in forums %}
             <div class="group cursor-pointer rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 relative bg-gray-900 aspect-[4/3]" 
-                 onclick="abrirModalForo('{{ foro.title|escapejs }}', '{{ foro.category|escapejs }}', '{% if foro.image %}{{ foro.image.url }}{% endif %}', '{{ foro.date_time|date:"d M Y, h:i A" }}', '{{ foro.location|escapejs }}', '{{ foro.moderator|escapejs }}', '{{ foro.speakers_info|escapejs }}')">
+                 onclick="abrirModalDesdeTarjeta(this)">
+                
+                <div class="hidden">
+                    <span class="d-titulo">{{ foro.title }}</span>
+                    <span class="d-categoria">{{ foro.category }}</span>
+                    <span class="d-imagen">{% if foro.image %}{{ foro.image.url }}{% endif %}</span>
+                    <span class="d-fecha">{{ foro.date_time|date:"d M Y, h:i A" }}</span>
+                    <span class="d-lugar">{{ foro.location }}</span>
+                    <span class="d-moderador">{{ foro.moderator }}</span>
+                    <div class="d-expositores">{{ foro.speakers_info|linebreaksbr }}</div>
+                </div>
                 
                 {% if foro.image %}
-                    <img src="{{ foro.image.url }}" alt="{{ foro.title }}" class="w-full h-full object-cover group-hover:scale-110 group-hover:opacity-50 transition-all duration-500 opacity-80">
+                    <img src="{{ foro.image.url }}" alt="{{ foro.title }}" class="w-full h-full object-cover group-hover:scale-110 group-hover:opacity-40 transition-all duration-700 opacity-70">
                 {% else %}
                     <div class="w-full h-full bg-gradient-to-br from-[#115b83] to-[#1a928d]"></div>
                 {% endif %}
                 
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6">
-                    <span class="text-[#1a928d] font-bold text-xs tracking-widest uppercase mb-1">{{ foro.category }}</span>
-                    <h3 class="text-2xl font-bold text-white leading-tight drop-shadow-md">{{ foro.title }}</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent flex flex-col justify-end p-6 pointer-events-none">
+                    <span class="text-[#1a928d] font-bold text-xs tracking-widest uppercase mb-2">{{ foro.category }}</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white leading-tight drop-shadow-md group-hover:-translate-y-1 transition-transform duration-300">{{ foro.title }}</h3>
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-full text-center text-gray-500">
-                <p>Pronto anunciaremos nuestros foros.</p>
+            <div class="col-span-full text-center text-gray-500 bg-gray-50 rounded-2xl p-10 border border-dashed border-gray-200">
+                <p>Pronto anunciaremos la cartelera de nuestros foros especializados.</p>
             </div>
             {% endfor %}
         </div>
     </section>
 
-    <div id="foroModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
-        <div id="foroModalContent" class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300 relative">
+    <div id="foroModal" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center p-4 sm:p-6" aria-labelledby="modalTitulo" role="dialog" aria-modal="true">
+        
+        <div id="foroModalOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="cerrarModalForo()"></div>
+
+        <div id="foroModalContent" class="relative w-full max-w-3xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden opacity-0 translate-y-8 sm:translate-y-0 sm:scale-95 transition-all duration-300 z-10" style="max-height: 90vh;">
             
-            <button onclick="cerrarModalForo()" class="absolute top-4 right-4 z-10 bg-black/40 hover:bg-black/70 text-white rounded-full p-2 backdrop-blur-md transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button onclick="cerrarModalForo()" class="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 bg-black/40 hover:bg-black/80 text-white rounded-full p-2 backdrop-blur-md transition-all focus:outline-none ring-2 ring-transparent focus:ring-white/50">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
-            <img id="modalImg" src="" alt="Poster" class="w-full h-48 md:h-64 object-cover rounded-t-3xl hidden">
-            
-            <div class="p-6 md:p-8">
-                <span id="modalCategoria" class="inline-block px-3 py-1 bg-[#1a928d]/10 text-[#1a928d] text-sm font-semibold rounded-full mb-3"></span>
+            <div class="overflow-y-auto flex-1 w-full overscroll-contain pb-6">
                 
-                <h3 id="modalTitulo" class="text-2xl md:text-3xl font-bold text-[#115b83] mb-6"></h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <div class="flex items-center gap-3 text-gray-600">
-                        <svg class="w-5 h-5 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span id="modalFecha"></span>
-                    </div>
-                    <div class="flex items-center gap-3 text-gray-600">
-                        <svg class="w-5 h-5 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <span id="modalLugar"></span>
-                    </div>
-                    <div class="flex items-center gap-3 text-gray-600 sm:col-span-2 mt-2">
-                        <svg class="w-5 h-5 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                        <span><strong>Moderador:</strong> <span id="modalModerador"></span></span>
-                    </div>
+                <div id="modalImgContainer" class="w-full relative bg-gray-900 hidden">
+                    <img id="modalImg" src="" alt="Poster del Foro" class="w-full h-48 sm:h-64 md:h-80 object-cover opacity-90">
+                    <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                 </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold text-[#115b83] mb-3 border-b pb-2">Expositores y Especialistas</h4>
-                    <p id="modalExpositores" class="text-gray-600 whitespace-pre-line leading-relaxed"></p>
+
+                <div class="p-6 sm:p-8 md:p-10 -mt-2 relative z-10">
+                    <span id="modalCategoria" class="inline-block px-4 py-1 bg-[#1a928d]/10 text-[#1a928d] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-full mb-4"></span>
+                    
+                    <h3 id="modalTitulo" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#115b83] mb-8 leading-tight"></h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10 bg-gray-50 p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-start gap-3 text-gray-700">
+                            <svg class="w-6 h-6 text-[#1a928d] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <div>
+                                <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Fecha y Hora</span>
+                                <span id="modalFecha" class="font-medium"></span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 text-gray-700">
+                            <svg class="w-6 h-6 text-[#1a928d] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <div>
+                                <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Lugar / Sala</span>
+                                <span id="modalLugar" class="font-medium"></span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 text-gray-700 sm:col-span-2 pt-4 border-t border-gray-200 mt-2">
+                            <svg class="w-6 h-6 text-[#1a928d] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            <div>
+                                <span class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Moderador</span>
+                                <span id="modalModerador" class="font-medium text-[#115b83]"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="flex items-center gap-2 text-xl font-bold text-[#115b83] mb-4 pb-2 border-b border-gray-100">
+                            <svg class="w-6 h-6 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Panel de Expositores
+                        </h4>
+                        <div id="modalExpositores" class="text-gray-600 leading-relaxed"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -279,56 +310,76 @@
 
     <script>
         const modal = document.getElementById('foroModal');
+        const modalOverlay = document.getElementById('foroModalOverlay');
         const modalContent = document.getElementById('foroModalContent');
 
+        // Esta nueva función extrae los datos de las etiquetas ocultas de forma segura
+        function abrirModalDesdeTarjeta(tarjetaElemento) {
+            const titulo = tarjetaElemento.querySelector('.d-titulo').innerHTML;
+            const categoria = tarjetaElemento.querySelector('.d-categoria').innerHTML;
+            const imagenUrl = tarjetaElemento.querySelector('.d-imagen').innerHTML.trim();
+            const fecha = tarjetaElemento.querySelector('.d-fecha').innerHTML;
+            const lugar = tarjetaElemento.querySelector('.d-lugar').innerHTML;
+            const moderador = tarjetaElemento.querySelector('.d-moderador').innerHTML;
+            const expositores = tarjetaElemento.querySelector('.d-expositores').innerHTML;
+
+            abrirModalForo(titulo, categoria, imagenUrl, fecha, lugar, moderador, expositores);
+        }
+
         function abrirModalForo(titulo, categoria, imagenUrl, fecha, lugar, moderador, expositores) {
-            // Llenar los datos
-            document.getElementById('modalTitulo').innerText = titulo;
-            document.getElementById('modalCategoria').innerText = categoria;
-            document.getElementById('modalFecha').innerText = fecha;
-            document.getElementById('modalLugar').innerText = lugar;
-            document.getElementById('modalModerador').innerText = moderador;
-            document.getElementById('modalExpositores').innerText = expositores;
+            // Llenar datos
+            document.getElementById('modalTitulo').innerHTML = titulo;
+            document.getElementById('modalCategoria').innerHTML = categoria;
+            document.getElementById('modalFecha').innerHTML = fecha;
+            document.getElementById('modalLugar').innerHTML = lugar;
+            document.getElementById('modalModerador').innerHTML = moderador;
+            document.getElementById('modalExpositores').innerHTML = expositores;
             
+            const imgContainer = document.getElementById('modalImgContainer');
             const imgElement = document.getElementById('modalImg');
-            if(imagenUrl) {
+            
+            if(imagenUrl && imagenUrl !== '' && imagenUrl !== 'None') {
                 imgElement.src = imagenUrl;
-                imgElement.classList.remove('hidden');
+                imgContainer.classList.remove('hidden');
             } else {
-                imgElement.classList.add('hidden');
+                imgContainer.classList.add('hidden');
             }
 
-            // Mostrar animación
+            // Mostrar el modal
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            // Pequeño retraso para que la transición CSS funcione
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
-                modalContent.classList.add('scale-100');
-            }, 10);
             
-            // Bloquear scroll de la página de fondo
+            // Bloquear el scroll de la página de fondo
             document.body.style.overflow = 'hidden';
+
+            // Forzar reflow para animación
+            void modal.offsetWidth;
+
+            // Animar entrada
+            modalOverlay.classList.remove('opacity-0');
+            modalContent.classList.remove('opacity-0', 'translate-y-8', 'sm:scale-95');
+            modalContent.classList.add('translate-y-0', 'sm:scale-100');
         }
 
         function cerrarModalForo() {
-            // Ocultar animación
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
+            // Restaurar scroll
+            document.body.style.overflow = '';
+
+            // Animar salida
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.remove('translate-y-0', 'sm:scale-100');
+            modalContent.classList.add('opacity-0', 'translate-y-8', 'sm:scale-95');
             
+            // Esperar que termine la animación antes de ocultar
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
-                // Restaurar scroll
-                document.body.style.overflow = 'auto';
             }, 300);
         }
 
-        // Cerrar modal al hacer clic afuera
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
+        // Permitir cerrar con la tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && !modal.classList.contains('hidden')) {
                 cerrarModalForo();
             }
         });
