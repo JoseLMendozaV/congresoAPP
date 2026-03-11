@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
+    <h1 class="text-9xl font-extrabold text-red-500 tracking-widest">500</h1>
+    <div class="bg-red-500 px-2 text-sm rounded rotate-12 absolute text-white shadow-lg">
+        Error del Servidor
+    </div>
+    <div class="mt-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            Algo salió mal de nuestro lado.
+        </h2>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+            Estamos experimentando problemas técnicos en el servidor. Por favor, intenta recargar la página en unos minutos.
+        </p>
+        <button onclick="window.location.reload();" 
+           class="inline-block bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors duration-300 mr-2">
+            Recargar página
+        </button>
+        <a href="{% url 'inicio' %}" 
+           class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg transition-colors duration-300 mt-2 sm:mt-0">
+            Ir al inicio
+        </a>
+    </div>
+</div>
+{% endblock %}
