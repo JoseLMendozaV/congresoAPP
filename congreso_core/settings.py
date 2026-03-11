@@ -25,17 +25,22 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-local')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+#DEBUG = True
+
 
 ALLOWED_HOSTS = [
     'citdes.utp.ac.pa', 
     'web-production-5f528.up.railway.app', 
-    '1gjvjayv.up.railway.app'
+    '1gjvjayv.up.railway.app',
+    '127.0.0.1:8000',
+    '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://citdes.utp.ac.pa',
     'https://web-production-5f528.up.railway.app',
     'https://1gjvjayv.up.railway.app',
+    'http://127.0.0.1:8000',
     # Aquí también agregarás la URL que te dé Railway más adelante
 ]
 

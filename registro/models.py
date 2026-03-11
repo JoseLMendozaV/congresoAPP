@@ -103,12 +103,58 @@ class AuditLog(models.Model):
 
 
 class Speaker(models.Model):
+
+    PAISES_CHOICES = [
+        ('pa', 'Panamá'),
+        ('co', 'Colombia'),
+        ('cr', 'Costa Rica'),
+        ('mx', 'México'),
+        ('es', 'España'),
+        ('ar', 'Argentina'),
+        ('cl', 'Chile'),
+        ('pe', 'Perú'),
+        ('us', 'Estados Unidos'),
+        ('br', 'Brasil'),
+        ('de', 'Alemania'),
+        ('uy', 'Uruguay'),
+
+    ]
+
+
+
     congress = models.ForeignKey(Congress, on_delete=models.CASCADE, related_name='speakers', verbose_name="Congreso")
     name = models.CharField(max_length=150, verbose_name="Nombre del Conferencista")
     specialty = models.CharField(max_length=200, verbose_name="Especialidad")
     topic = models.CharField(max_length=200, verbose_name="Tema a exponer")
-    country = models.CharField(max_length=100, verbose_name="País")
+    country = models.CharField(max_length=2, choices=PAISES_CHOICES, default='pa', verbose_name="País")
     photo = models.ImageField(upload_to='speakers/', blank=True, null=True, verbose_name="Foto de perfil")
+
+    def __str__(self):
+        return self.name
+    
+
+class ForumSpeaker(models.Model):
+    PAISES_CHOICES = [
+        ('pa', 'Panamá'),
+        ('co', 'Colombia'),
+        ('cr', 'Costa Rica'),
+        ('mx', 'México'),
+        ('es', 'España'),
+        ('ar', 'Argentina'),
+        ('cl', 'Chile'),
+        ('pe', 'Perú'),
+        ('us', 'Estados Unidos'),
+        ('br', 'Brasil'),
+        ('de', 'Alemania'),
+        ('uy', 'Uruguay'),
+    ]
+
+    congress = models.ForeignKey(Congress, on_delete=models.CASCADE, related_name='forum_speakers', verbose_name="Congreso")
+    name = models.CharField(max_length=150, verbose_name="Nombre del Panelista")
+    specialty = models.CharField(max_length=200, verbose_name="Especialidad")
+    topic = models.CharField(max_length=200, verbose_name="Tema del Foro")
+    country = models.CharField(max_length=2, choices=PAISES_CHOICES, default='pa', verbose_name="País")
+    photo = models.ImageField(upload_to='forum_speakers/', blank=True, null=True, verbose_name="Foto de perfil")
 
     def __str__(self):
         return self.name

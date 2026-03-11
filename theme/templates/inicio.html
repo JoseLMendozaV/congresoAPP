@@ -25,7 +25,7 @@
         </div>
 
         <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-sm">
-            {% if congreso %}{{ congreso.name }}{% else %}Congreso Internacional de Tecnología{% endif %}
+            {% if congreso %}{{ congreso.name }}{% else %}V Congreso Internacional de Ciencias y Tecnologías para el Desarrollo Sostenible{% endif %}
         </h1>
         
         <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-3xl font-light">
@@ -35,7 +35,7 @@
         <div class="flex flex-col sm:flex-row items-center gap-6 p-4 sm:p-2 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 mb-12 w-full max-w-2xl justify-center shadow-xl">
             <div class="flex items-center gap-3 px-4 py-2 text-white">
                 <svg class="w-6 h-6 text-[#1a928d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="font-medium">{% if congreso %}{{ congreso.start_date }} al {{ congreso.end_date }}{% else %}15 - 18 Octubre, 2026{% endif %}</span>
+                <span class="font-medium">{% if congreso %}{{ congreso.start_date }} al {{ congreso.end_date }}{% else %}16 - 18 Septiembre, 2026{% endif %}</span>
             </div>
             <div class="hidden sm:block w-px h-8 bg-white/20"></div>
             <div class="flex items-center gap-3 px-4 py-2 text-white">
@@ -158,16 +158,63 @@
                     {% else %}
                         <img src="https://ui-avatars.com/api/?name={{ speaker.name|urlencode }}&background=115b83&color=fff&size=200" alt="{{ speaker.name }}" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
                     {% endif %}
+
+                    <div class="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-lg border border-gray-100 z-10 hover:scale-110 transition-transform duration-300" 
+                        title="{{ speaker.get_country_display }}">
+                        <img src="https://flagcdn.com/w40/{{ speaker.country|lower }}.png" 
+                            width="28" 
+                            alt="{{ speaker.get_country_display }}" 
+                            class="rounded-sm shadow-sm">
+                    </div>
                 </div>
+                
                 <h3 class="text-2xl font-bold text-[#115b83]">{{ speaker.name }}</h3>
-                
-                <p class="text-[#1a928d] font-semibold mb-1">{{ speaker.specialty }} | {{ speaker.country }}</p>
-                
+                <p class="text-[#1a928d] font-semibold mb-1">{{ speaker.specialty }}</p>
                 <p class="text-gray-500 text-sm font-light">{{ speaker.topic }}</p>
             </div>
             {% empty %}
             <div class="col-span-full text-center text-gray-500">
                 <p>Pronto anunciaremos a nuestros conferencistas magistrales.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <section aria-labelledby="forums-title" class="mt-20">
+        <div class="text-center mb-16">
+            <h2 id="forums-title" class="text-3xl font-bold text-[#115b83]">Panelistas de Foros</h2>
+            <div class="h-1 w-20 bg-[#1a928d] mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {% for foro in forum_speakers %}
+            <div class="text-center group">
+                <div class="relative w-48 h-48 mx-auto mb-6">
+                    <div class="absolute inset-0 rounded-full border-[3px] border-dashed border-[#1a928d] opacity-30 group-hover:rotate-180 transition-transform duration-1000"></div>
+                    
+                    {% if foro.photo %}
+                        <img src="{{ foro.photo.url }}" alt="{{ foro.name }}" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ foro.name|urlencode }}&background=115b83&color=fff&size=200" alt="{{ foro.name }}" class="w-full h-full object-cover rounded-full p-2 group-hover:scale-105 transition-transform duration-300">
+                    {% endif %}
+
+                    <div class="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-lg border border-gray-100 z-10 hover:scale-110 transition-transform duration-300" 
+                         title="{{ foro.get_country_display }}">
+                        <img src="https://flagcdn.com/w40/{{ foro.country|lower }}.png" 
+                             width="28" 
+                             alt="{{ foro.get_country_display }}" 
+                             class="rounded-sm shadow-sm">
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-bold text-[#115b83]">{{ foro.name }}</h3>
+                <p class="text-[#1a928d] font-semibold mb-1">{{ foro.specialty }}</p>
+                <p class="text-gray-500 text-sm font-light">{{ foro.topic }}</p>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500">
+                <p>Pronto anunciaremos a los panelistas de nuestros foros.</p>
             </div>
             {% endfor %}
         </div>

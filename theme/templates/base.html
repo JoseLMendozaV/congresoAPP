@@ -3,6 +3,7 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <title>Congreso Internacional 2026</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -14,11 +15,14 @@
     <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 print:hidden border-b border-gray-100 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             
-            <a href="{% url 'inicio' %}" class="text-2xl font-extrabold tracking-tight text-[#115b83] hover:text-[#1a928d] transition-colors flex items-center gap-2 group">
-                <div class="bg-gradient-to-br from-[#115b83] to-[#1a928d] p-1.5 rounded-lg text-white group-hover:scale-105 transition-transform">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                </div>
-                Congreso 2026
+            <a href="{% url 'inicio' %}" class="flex items-center gap-3 group">
+                <img src="{% static 'logo.png' %}" 
+                    alt="Logo CITDES" 
+                    class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                
+                <span class="text-2xl font-extrabold text-[#115b83] tracking-wide">
+                    CITDES
+                </span>
             </a>
 
             <div class="flex items-center gap-4 text-sm md:text-base font-medium">
@@ -94,8 +98,8 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-white/40 font-light">
-            <p>&copy; 2026 Congreso Internacional de Tecnología. Todos los derechos reservados.</p>
-            <p class="mt-2 md:mt-0">Desarrollado con Django & Tailwind CSS</p>
+            <p>&copy; 2026 V Congreso Internacional de Ciencias y Tecnologías para el Desarrollo Sostenible. Todos los derechos reservados.</p>
+            
         </div>
     </footer>
 
