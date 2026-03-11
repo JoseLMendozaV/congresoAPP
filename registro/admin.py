@@ -53,15 +53,12 @@ class AuditLogAdmin(admin.ModelAdmin):
     list_filter = ('timestamp', 'user')
     search_fields = ('action', 'details')
 
+
 @admin.register(Speaker)
 class SpeakerAdmin(admin.ModelAdmin):
-    # Aquí es donde estaba el error, asegúrate de quitar 'institution'
-    list_display = ('name', 'specialty', 'country', 'topic', 'congress')
-    
-    # Asegúrate de quitarlo de aquí también
-    search_fields = ('name', 'specialty', 'country', 'topic')
-    
-    list_filter = ('congress', 'country')
+    list_display = ('name', 'presentation_date', 'congress')
+    list_filter = ('congress', 'presentation_date')
+
 
 @admin.register(Forum)
 class ForumAdmin(admin.ModelAdmin):

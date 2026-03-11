@@ -129,6 +129,13 @@ class Speaker(models.Model):
     country = models.CharField(max_length=2, choices=PAISES_CHOICES, default='pa', verbose_name="País")
     photo = models.ImageField(upload_to='speakers/', blank=True, null=True, verbose_name="Foto de perfil")
 
+    presentation_date = models.DateField(
+        verbose_name="Fecha de Presentación", 
+        null=True, 
+        blank=True, 
+        help_text="Elige el día para agrupar al conferencista en la cartelera."
+    )
+
     def __str__(self):
         return self.name
     
